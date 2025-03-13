@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Iris - Model prediction</title>
+    <title>DS Salary - Model prediction</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,18 +41,21 @@
     </style>
 </head>
 <body>
-    <h2>Introduce the values</h2>
+    <h2>Introduce los valores</h2>
     
     <form action="/" method="post">
-        Petal width: <input type="number" step="any" name="val1" required><br><br>
-        Petal length: <input type="number" step="any" name="val2" required><br><br>
-        Sepal width: <input type="number" step="any" name="val3" required><br><br>
-        Sepal length: <input type="number" step="any" name="val4" required><br><br>
+        Año de Trabajo: <input type="number" step="any" name="val1" required><br><br>
+        Nivel de Experiencia: <input type="text" step="any" name="val2" required><br><br>
+        Tipo de Empleo: <input type="text" step="any" name="val3" required><br><br>
+        % de Remoto: <input type="number" step="any" name="val4" required><br><br>
+        Tamaño de Compañia: <input type="text" step="any" name="val5" required><br><br>
+        Residencia del Empleado: <input type="text" step="any" name="val6" required><br><br>
+        Ubicacion de la Compañia: <input type="text" step="any" name="val7" required><br><br>
         <input type="submit" value="Predict">
     </form>
     
     {% if prediction != None %}
-        <h3>Prediction: {{ prediction }}</h3>
+        <h3>Predicción: {{ prediction }}</h3>
     {% endif %}
 </body>
 </html>
