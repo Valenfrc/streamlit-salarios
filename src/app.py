@@ -1,9 +1,7 @@
-from flask import Flask, request, render_template
-import json
 from xgboost import XGBRegressor
+import streamlit as st
+import json
 
-
-app = Flask(__name__)
 model = XGBRegressor()
 model.load_model('../models/xgboost_optimizado.json')
 
@@ -18,23 +16,45 @@ with open('../data/processed/dic_er.json','r', encoding='utf-8') as archivo:
 with open('../data/processed/dic_cs.json','r', encoding='utf-8') as archivo:
     dic_cs = json.load(archivo)
 
-@app.route("/", methods = ["GET", "POST"])
-def index():
-    if request.method == "POST":
-        
-        # Obtain values from form
-        val1 = float(request.form["val1"])#work_year
-        val2 = request.form["val2"]#experience_level
-        val3 = request.form["val3"]#employment_type
-        val4 = float(request.form["val4"])#remote_ratio
-        val5 = request.form["val5"]#company_size
-        val6 = request.form["val6"]#employee_residence_num
-        val7 = request.form["val7"]#company_location
-        
-        data = [[val1, dic_el[val2], dic_et[val3], val4,dic_cs[val5],dic_er[val6],dic_cl[val7]]]
-        prediction = str(model.predict(data)[0])
-        pred_class = prediction
-    else:
-        pred_class = None
-    
-    return render_template("index.html", prediction = pred_class)
+st.title("Predicción Sueldo Data Science")
+
+val1 = st.slider("Año", min_value = 2020, max_value = 2025, step = 1)
+val2 = st.selectbox(
+    "Nivel de Conocimiento del Empleado",
+    (dic_el.keys()),
+    index=None,
+    placeholder="Selecciona nivel de experiencia....",
+)
+val3 = st.selectbox(
+    "Tipo de Contrato",
+    (dic_et.keys()),
+    index=None,
+    placeholder="Selecciona tipo de empleo....",
+)
+val4 = st.slider("Porcentaje de Trabajo Remoto", min_value = 0, max_value = 100, step = 1)
+val5 = st.selectbox(
+    "Tamaño de la Compañia",
+    (dic_cs.keys()),
+    index=None,
+    placeholder="Selecciona el tamaño...",
+)
+
+val6 = st.selectbox(
+    "Pais de Residencia del Empleado",
+    (dic_er.keys()),
+    index=None,
+    placeholder="Selecciona el pais...",
+)
+
+val7 = st.selectbox(
+    "Pais de Origen de la Compañia",
+    (dic_cl.keys()),
+    index=None,
+    placeholder="Selecciona el pais...",
+)
+
+
+if st.button("Predecir"):
+    prediction = str(model.predict([[val1, dic_el[val2], dic_et[val3], val4,dic_cs[val5],dic_er[val6],dic_cl[val7]]])[0])
+    pred_class = prediction
+    st.write("Prediction:", pred_class)
